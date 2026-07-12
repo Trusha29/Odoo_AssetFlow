@@ -1,27 +1,56 @@
-# AssetFlow
+# 🚀 AssetFlow
 
-Enterprise Asset & Resource Management System
+AssetFlow is an Enterprise Asset Management System developed for the **Odoo Hackathon**. It helps organizations efficiently manage assets, employees, bookings, maintenance, audits, and reports through a modern, user-friendly dashboard.
 
-AssetFlow simplifies how organizations track, allocate, and maintain physical assets and shared resources through a centralized ERP-style platform.
+## ✨ Features
 
-## Modern Stack
+- 🔐 User Authentication (Login & Signup)
+- 📦 Asset Management
+- 👥 Employee & Department Management
+- 📅 Asset Booking
+- 🛠 Maintenance Tracking
+- 📋 Audit Management
+- 📊 Reports & Analytics
+- 🔔 Notifications
+- 📱 Responsive UI
 
-- ⚛️ React.js
-- 🎨 Tailwind CSS
-- 🟢 Node.js + Express
-- 🍃 MongoDB
-- 🔐 JWT Authentication
-- 📊 Chart.js
-- 📅 React Big Calendar
-- ☁️ Cloudinary (asset images)
-- 📁 Multer (file uploads)
-- 🐙 Git & GitHub
+## 🛠 Tech Stack
 
-## Project Structure
+**Frontend**
+- React.js
+- Vite
+- Tailwind CSS
+- React Router
 
-- `client/` — React frontend
-- `server/` — Node.js + Express backend
+**Backend**
+- Node.js
+- Express.js
+- MongoDB
+- JWT Authentication
 
-## Notes
+## 🚀 Run Locally
 
-This workspace includes a responsive `Sidebar` component in `client/src/components/layout/Sidebar.jsx` and supports a modern AssetFlow UI architecture.
+### Frontend
+
+```bash
+cd client
+npm install
+npm run dev
+```
+
+### Backend
+
+```bash
+cd server
+npm install
+npm start
+```
+
+## 👨‍💻 Team
+
+- **Trusha Patel**
+- **Hetvi Taank** 
+
+---
+
+Developed for **Odoo Hackathon 2026** 🎉
