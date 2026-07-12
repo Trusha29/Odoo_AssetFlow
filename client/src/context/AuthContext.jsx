@@ -1,64 +1,95 @@
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { useNavigate } from "react-router-dom";
+import { authApi } from "../services/api.js";
 
 const AuthContext = createContext(null);
 
+function getInitialUser() {
+  if (typeof window === "undefined") {
+    return null;
+  }
+
+  const stored = window.localStorage.getItem("assetflow_user");
+  return stored ? JSON.parse(stored) : null;
+}
+
+function getInitialToken() {
+  if (typeof window === "undefined") {
+    return null;
+  }
+
+  return window.localStorage.getItem("assetflow_token");
+}
+
 export function AuthProvider({ children }) {
   const navigate = useNavigate();
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(getInitialUser);
+  const [token, setToken] = useState(getInitialToken);
 
   useEffect(() => {
-    const stored = window.localStorage.getItem("assetflow_user");
-    if (stored) {
-      setUser(JSON.parse(stored));
-    }
-  }, []);
+    if (typeof window === "undefined") return;
 
-  useEffect(() => {
     if (user) {
       window.localStorage.setItem("assetflow_user", JSON.stringify(user));
     } else {
       window.localStorage.removeItem("assetflow_user");
     }
-  }, [user]);
 
-  const login = (credentials) => {
-    const mockUser = {
-      name: "Ananya Sharma",
-      email: credentials.email,
-      role: "Employee",
-    };
-    setUser(mockUser);
-    navigate("/dashboard");
-  };
+    if (token) {
+      window.localStorage.setItem("assetflow_token", token);
+    } else {
+      window.localStorage.removeItem("assetflow_token");
+    }
+  }, [user, token]);
 
-  const signup = (values) => {
-    const mockUser = {
-      name: values.name,
-      email: values.email,
-      role: "Employee",
-    };
-    setUser(mockUser);
-    navigate("/dashboard");
-  };
+  const login = useCallback(
+    async (credentials) => {
+      const { data } = await authApi.login(credentials);
+      setUser(data.user);
+      setToken(data.token);
+      navigate("/dashboard");
+      return data;
+    },
+    [navigate],
+  );
 
-  const logout = () => {
+  const signup = useCallback(
+    async (values) => {
+      const { data } = await authApi.signup(values);
+      setUser(data.user);
+      setToken(data.token);
+      navigate("/dashboard");
+      return data;
+    },
+    [navigate],
+  );
+
+  const logout = useCallback(() => {
     setUser(null);
+    setToken(null);
     navigate("/login");
-  };
+  }, [navigate]);
 
   const value = useMemo(
-    () => ({ user, login, signup, logout, isAuthenticated: Boolean(user) }),
-    [user],
+    () => ({
+      user,
+      token,
+      login,
+      signup,
+      logout,
+      isAuthenticated: Boolean(user),
+    }),
+    [user, token, login, signup, logout],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
-export function useAuth() {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error("useAuth must be used within AuthProvider");
-  }
-  return context;
-}
+export { AuthContext };
+export { useAuth } from "./useAuth.jsx";

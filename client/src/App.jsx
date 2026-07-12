@@ -5,6 +5,8 @@ import PrivateRoute from "./routes/PrivateRoute.jsx";
 import Dashboard from "./pages/Dashboard/Dashboard.jsx";
 import Login from "./pages/Auth/Login.jsx";
 import Signup from "./pages/Auth/Signup.jsx";
+import ForgotPassword from "./pages/Auth/ForgotPassword.jsx";
+import ResetPassword from "./pages/Auth/ResetPassword.jsx";
 import Assets from "./pages/Assets/Assets.jsx";
 import Employees from "./pages/Organization/Employees.jsx";
 import Departments from "./pages/Organization/Departments.jsx";
@@ -22,6 +24,8 @@ function App() {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
           <Route element={<PrivateRoute />}>
             <Route element={<AppLayout />}>
               <Route path="/" element={<Navigate to="/dashboard" replace />} />

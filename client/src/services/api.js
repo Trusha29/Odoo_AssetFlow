@@ -7,9 +7,19 @@ const client = axios.create({
   },
 });
 
+client.interceptors.request.use((config) => {
+  if (typeof window !== "undefined") {
+    const token = window.localStorage.getItem("assetflow_token");
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+  }
+  return config;
+});
+
 export const authApi = {
   login: (payload) => client.post("/auth/login", payload),
-  signup: (payload) => client.post("/auth/signup", payload),
+  signup: (payload) => client.post("/auth/register", payload),
 };
 
 export const assetsApi = {
