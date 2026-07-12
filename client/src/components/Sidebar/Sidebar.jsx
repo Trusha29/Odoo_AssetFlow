@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { NavLink } from "react-router-dom";
 import {
   FiBarChart2,
   FiBell,
@@ -14,19 +15,18 @@ import {
 } from "react-icons/fi";
 
 const menuItems = [
-  { label: "Dashboard", icon: FiHome, key: "dashboard" },
-  { label: "Assets", icon: FiLayers, key: "assets" },
-  { label: "Employees", icon: FiUsers, key: "employees" },
-  { label: "Departments", icon: FiGrid, key: "departments" },
-  { label: "Bookings", icon: FiCalendar, key: "bookings" },
-  { label: "Maintenance", icon: FiTool, key: "maintenance" },
-  { label: "Audit", icon: FiShield, key: "audit" },
-  { label: "Reports", icon: FiBarChart2, key: "reports" },
-  { label: "Notifications", icon: FiBell, key: "notifications" },
+  { label: "Dashboard", icon: FiHome, path: "/dashboard" },
+  { label: "Assets", icon: FiLayers, path: "/assets" },
+  { label: "Employees", icon: FiUsers, path: "/employees" },
+  { label: "Departments", icon: FiGrid, path: "/departments" },
+  { label: "Bookings", icon: FiCalendar, path: "/bookings" },
+  { label: "Maintenance", icon: FiTool, path: "/maintenance" },
+  { label: "Audit", icon: FiShield, path: "/audit" },
+  { label: "Reports", icon: FiBarChart2, path: "/reports" },
+  { label: "Notifications", icon: FiBell, path: "/notifications" },
 ];
 
-function Sidebar({ initialActive = "dashboard" }) {
-  const [activeMenu, setActiveMenu] = useState(initialActive);
+function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -67,25 +67,22 @@ function Sidebar({ initialActive = "dashboard" }) {
         <nav className="space-y-1 px-3 py-5">
           {menuItems.map((item) => {
             const Icon = item.icon;
-            const isActive = activeMenu === item.key;
-
             return (
-              <button
-                key={item.key}
-                type="button"
-                onClick={() => {
-                  setActiveMenu(item.key);
-                  setIsOpen(false);
-                }}
-                className={`flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-left text-sm font-medium transition ${
-                  isActive
-                    ? "bg-slate-800 text-white shadow-inner"
-                    : "text-slate-300 hover:bg-slate-800 hover:text-white"
-                }`}
+              <NavLink
+                key={item.path}
+                to={item.path}
+                onClick={() => setIsOpen(false)}
+                className={({ isActive }) =>
+                  `flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium transition ${
+                    isActive
+                      ? "bg-slate-800 text-white shadow-inner"
+                      : "text-slate-300 hover:bg-slate-800 hover:text-white"
+                  }`
+                }
               >
                 <Icon className="h-5 w-5" />
                 <span>{item.label}</span>
-              </button>
+              </NavLink>
             );
           })}
         </nav>
