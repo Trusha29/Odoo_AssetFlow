@@ -4,54 +4,46 @@ const generateToken = require("../utils/generateToken");
 
 // Register User
 const register = async (req, res) => {
-    console.log("1");
+  try {
+    const { name, email, password } = req.body;
 
-    try {
-        console.log("2");
-
-        const { name, email, password } = req.body;
-
-        console.log("3");
-
-        const userExists = await User.findOne({ email });
-
-        console.log("4");
-
-        const salt = await bcrypt.genSalt(10);
-
-        console.log("5");
-
-        const hashedPassword = await bcrypt.hash(password, salt);
-
-        console.log("6");
-
-        const user = await User.create({
-        name,
-        email,
-        password: hashedPassword,
-        role: "Employee",
-        });
-
-        console.log("7");
-
-        const token = generateToken(user._id);
-
-        console.log("8");
-
-        return res.status(201).json({
-        success: true,
-        token,
-        });
-
-    } catch (error) {
-        console.log(error);
-
-        return res.status(500).json({
+    const userExists = await User.findOne({ email });
+    if (userExists) {
+      return res.status(400).json({
         success: false,
-        message: error.message,
-        });
+        message: "User already exists",
+      });
     }
- };
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    const user = await User.create({
+      name,
+      email,
+      password: hashedPassword,
+      role: "Employee",
+    });
+
+    const token = generateToken(user._id);
+
+    return res.status(201).json({
+      success: true,
+      token,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
 /*const register = async (req, res) => {
     console.log("Register API hit");
   try {
